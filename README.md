@@ -1,4 +1,5 @@
-###Steps to run:
-1. ```composer install```
-2. ```php console.php``` (for demo application)
-3. ```./vendor/bin/phpunit``` (to run tests)
+##Steps to run:
+1. ``git clone https://github.com/cristitoma/trip-sorter.git``
+2. ```composer install```
+3. ```php console.php``` (for demo application)
+4. ```./vendor/bin/phpunit``` (to run tests)
