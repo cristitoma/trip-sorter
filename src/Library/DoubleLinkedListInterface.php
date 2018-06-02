@@ -14,12 +14,51 @@ interface DoubleLinkedListInterface
     public function add(DoubleLinkedNodeInterface $node);
 
     /**
-     * This method is trying to link unordered nodes
+     * @param DoubleLinkedNodeInterface $node
+     * @param $index
      */
-    public function link();
+    public function set(DoubleLinkedNodeInterface $node, $index);
 
     /**
-     * @return array
+    * @param DoubleLinkedNodeInterface $node
+    */
+    public function remove(DoubleLinkedNodeInterface $node);
+
+    /**
+     * @return \ArrayIterator
      */
-    public function getList();
+    public function getIterator();
+
+    /**
+     * @return boolean
+     */
+    public function isLinked();
+
+    /**
+     * @return DoubleLinkedNodeInterface
+     */
+    public function getFirst();
+
+    /**
+     * @return DoubleLinkedNodeInterface
+     */
+    public function getLast();
+
+    /**
+     * @param $index
+     * @return DoubleLinkedNodeInterface
+     */
+    public function getNodeByIndex($index);
+
+    /**
+     * @param $key
+     * @return integer
+     */
+    public function getNextIndex($key);
+
+    /**
+     * @param $key
+     * @return integer
+     */
+    public function getPreviousIndex($key);
 }

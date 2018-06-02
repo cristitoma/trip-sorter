@@ -5,6 +5,7 @@ namespace TripSorter\Test\Library;
 use PHPUnit\Framework\TestCase;
 use TripSorter\Library\DoubleLinkedList;
 use TripSorter\Library\DoubleLinkedListInterface;
+use TripSorter\Library\DoubleLinkedListService;
 use TripSorter\Library\DoubleLinkedNode;
 use TripSorter\Library\DoubleLinkedSampleNodeInterface;
 
@@ -12,9 +13,8 @@ use TripSorter\Library\DoubleLinkedSampleNodeInterface;
  * Class DoubleLinkedListTest
  * @package TripSorter\Test\Library
  */
-class DoubleLinkedListTest extends TestCase
+class DoubleLinkedListServiceTest extends TestCase
 {
-
     /**
      * Test Linked list
      */
@@ -29,11 +29,12 @@ class DoubleLinkedListTest extends TestCase
             /** @var $doubleLinkedList DoubleLinkedListInterface */
             list($doubleLinkedList, $expectedValues, $fixtureName) = $fixture;
 
-            $doubleLinkedList->link();
+            $doubleLinkedListService = new DoubleLinkedListService();
+            $doubleLinkedListService->link($doubleLinkedList);
 
             $listValues = [];
             /** @var DoubleLinkedSampleNodeInterface $node */
-            foreach ($doubleLinkedList->getList() as $node)
+            foreach ($doubleLinkedList as $node)
             {
                 $listValues[] = $node->getValue();
             }

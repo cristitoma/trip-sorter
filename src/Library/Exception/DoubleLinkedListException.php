@@ -13,4 +13,5 @@ class DoubleLinkedListException extends \Exception
     const FAIL_TO_LINK_HEAD_WITH_TAIL = 3;
     const UNDEFINED_FIRST_NODE = 4;
     const UNDEFINED_LAST_NODE = 5;
+    const UNDEFINED_NODE = 6;
 }

@@ -17,10 +17,10 @@ final class BoardingCardList extends DoubleLinkedList
     public function __toString()
     {
         $story = "";
-        if ($this->isLinked) {
+        if ($this->isLinked()) {
             $storyRow = 1;
             /** @var TransportationCardInterface $node */
-            foreach ($this->nodes as $node) {
+            foreach ($this as $node) {
                 $nodeStory = (string)$node;
                 $story .= "{$storyRow}. {$nodeStory}\n";
                 $storyRow++;

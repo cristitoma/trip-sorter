@@ -6,34 +6,13 @@ namespace TripSorter\Card;
  * Class PlaneCard
  * @package TripSorter\Card
  */
-final class PlaneCard implements PlaneCardInterface
+final class PlaneCard extends AbstractTransportationCard implements PlaneCardInterface
 {
     /** @var string */
     protected $baggageInformation;
 
     /** @var string */
     protected $gate;
-
-    use TransportationCardSetterAndGetterTrait;
-
-    /**
-     * PlaneCard constructor.
-     * @param string $previous
-     * @param string $next
-     * @param string $number
-     * @param string $gate
-     * @param string $seat
-     * @param string $baggageInformation
-     */
-    public function __construct($previous = '', $next = '', $number = '', $gate = '', $seat = '', $baggageInformation = '')
-    {
-        $this->previous = $previous;
-        $this->next = $next;
-        $this->number = $number;
-        $this->gate = $gate;
-        $this->seat = $seat;
-        $this->baggageInformation = $baggageInformation;
-    }
 
     /**
      * @param $baggageInformation

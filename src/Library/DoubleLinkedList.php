@@ -8,37 +8,56 @@ use TripSorter\Library\Exception\DoubleLinkedListException;
  * Class DoubleLinkedList
  * @package TripSorter\Library
  */
-class DoubleLinkedList implements DoubleLinkedListInterface
+class DoubleLinkedList implements DoubleLinkedListInterface, \IteratorAggregate
 {
     const FIRST_NODE_SIGNIFICATION = 'first';
     const LAST_NODE_SIGNIFICATION  = 'last';
 
     /** @var array */
-    protected $nodes = [];
+    private $nodes = [];
 
     /** @var int */
-    protected $nodeId = 0;
+    private $nodeId = 0;
 
     /** @var bool */
-    protected $isLinked = false;
+    private $isLinked = true;
 
     /** @var array */
-    protected $previousIndex = [];
+    private $previousIndex = [];
 
     /** @var array */
-    protected $nextIndex = [];
+    private $nextIndex = [];
 
     /** @var array */
-    protected $groupedIndex = [];
+    private $groupedIndex = [];
 
     /** @var array */
-    protected $mostSignificantIndex = [];
+    private $mostSignificantIndex = [];
+
+    /**
+     * DoubleLinkedList constructor.
+     * @param integer $n
+     */
+    public function __construct($n = null)
+    {
+        if ($n !== null) {
+            $this->nodes = array_fill(0, $n - 1, null);
+        }
+    }
 
     /**
      * @param DoubleLinkedNodeInterface $node
      */
     public function add(DoubleLinkedNodeInterface $node)
     {
+        if (count($this->nodes) > 0) {
+            /** @var DoubleLinkedNodeInterface $tailNode */
+            $tailNode = $this->nodes[count($this->nodes) - 1];
+            if ($tailNode->getNext() != $node->getPrevious()) {
+                $this->isLinked = false;
+            }
+        }
+
         $this->previousIndex[$node->getPrevious()] = $this->nodeId;
         $this->nextIndex[$node->getNext()] = $this->nodeId;
         $this->nodes[$this->nodeId++] = $node;
@@ -48,67 +67,118 @@ class DoubleLinkedList implements DoubleLinkedListInterface
     }
 
     /**
-     * This method is trying to link unordered nodes
-     *
-     * @throws DoubleLinkedListException
+     * @param DoubleLinkedNodeInterface $node
+     * @param $index
      */
-    public function link()
+    public function set(DoubleLinkedNodeInterface $node, $index)
     {
-        $head[] = $this->getFirst();
-        $tail[] = $this->getLast();
+        $this->isLinked = true;
 
-
-        for($i = 0; $i < count($this->nodes) / 2; $i++)
-        {
-            /** @var DoubleLinkedNodeInterface $headNode */
-            $headNode = $head[count($head) - 1];
-            /** @var DoubleLinkedNodeInterface $tailNode */
-            $tailNode = $tail[0];
-
-            if ($headNode->getNext() == $tailNode->getPrevious()) {
-                $this->isLinked = true;
-                break;
-            }
-
-            if (isset($this->previousIndex[$headNode->getNext()])) {
-                $headNode = $this->nodes[$this->previousIndex[$headNode->getNext()]];
-                $head[] = $headNode;
+        if (array_key_exists(($index-1), $this->nodes)) {
+            if ($this->nodes[$index-1] === null) {
+                $this->isLinked = false;
             } else {
-                throw new DoubleLinkedListException('There is no next node in list.', DoubleLinkedListException::UNDEFINED_NEXT_NODE);
-            }
-
-            if ($headNode->getNext() == $tailNode->getPrevious()) {
-                $this->isLinked = true;
-                break;
-            }
-
-            if (isset($this->nextIndex[$tailNode->getPrevious()])) {
-                $tail = array_merge([$this->nodes[$this->nextIndex[$tailNode->getPrevious()]]], $tail);
-            } else {
-                throw new DoubleLinkedListException('There is no previous node in list.', DoubleLinkedListException::UNDEFINED_PREVIOUS_NODE);
+                /** @var DoubleLinkedNodeInterface $previousNode */
+                $previousNode = $this->nodes[$index-1];
+                if ($previousNode->getNext() != $node->getPrevious()) {
+                    $this->isLinked = false;
+                }
             }
         }
 
-        if ($this->isLinked) {
-            $this->nodes = array_merge($head, $tail);
+        if (array_key_exists(($index+1), $this->nodes)) {
+            if ($this->nodes[$index+1] === null) {
+                $this->isLinked = false;
+            } else {
+                /** @var DoubleLinkedNodeInterface $nextNode */
+                $nextNode = $this->nodes[$index+1];
+                if ($nextNode->getPrevious() != $node->getNext()) {
+                    $this->isLinked = false;
+                }
+            }
+        }
+
+        $this->previousIndex[$node->getPrevious()] = $index;
+        $this->nextIndex[$node->getNext()] = $index;
+        $this->nodes[$index] = $node;
+
+        $this->groupIndex($node->getNext(), self::LAST_NODE_SIGNIFICATION);
+        $this->groupIndex($node->getPrevious(), self::FIRST_NODE_SIGNIFICATION);
+    }
+
+    /**
+     * @param $index
+     * @return DoubleLinkedNodeInterface
+     * @throws DoubleLinkedListException
+     */
+    public function getNodeByIndex($index)
+    {
+        if (isset($this->nodes[$index])) {
+            return $this->nodes[$index];
+        }
+
+        throw new DoubleLinkedListException('Node dose not exist.', DoubleLinkedListException::UNDEFINED_NODE);
+    }
+
+    /**
+     * @param DoubleLinkedNodeInterface $node
+     * @throws DoubleLinkedListException
+     */
+    public function remove(DoubleLinkedNodeInterface $node)
+    {
+        if (isset($this->previousIndex[$node->getPrevious()])
+            && isset($this->nextIndex[$node->getNext()])
+            && $this->previousIndex[$node->getPrevious()] == $this->nextIndex[$node->getNext()]) {
+
+            //unset indexes
+            unset($this->nodes[$this->previousIndex[$node->getPrevious()]]);
+            unset($this->previousIndex[$node->getPrevious()]);
+            unset($this->nextIndex[$node->getNext()]);
+            unset($this->mostSignificantIndex[$node->getPrevious()]);
+            unset($this->mostSignificantIndex[$node->getNext()]);
+
+            //decrease grouped index
+            if ($this->groupedIndex[$node->getPrevious()] == 1) {
+                unset($this->groupedIndex[$node->getPrevious()]);
+            } else {
+                $this->groupedIndex[$node->getPrevious()]--;
+            }
+
+            if ($this->groupedIndex[$node->getNext()] == 1) {
+                unset($this->groupedIndex[$node->getNext()]);
+            } else {
+                $this->groupedIndex[$node->getNext()]--;
+            }
+
+            //reindex array nodes
+            $this->nodes = array_values($this->nodes);
+            $this->nodeId = count($this->nodes);
         } else {
-            throw new DoubleLinkedListException('The list cant be linked, nodes are missing.', DoubleLinkedListException::FAIL_TO_LINK_HEAD_WITH_TAIL);
+            throw new DoubleLinkedListException('Node dose not exist.', DoubleLinkedListException::UNDEFINED_NODE);
         }
     }
 
     /**
-     * @return array
+     * @return bool
      */
-    public function getList()
+    public function isLinked()
     {
-        return $this->nodes;
+        return $this->isLinked;
+    }
+
+    /**
+     * @return \ArrayIterator
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->nodes);
     }
 
     /**
      * @return DoubleLinkedNodeInterface
      * @throws DoubleLinkedListException
      */
-    protected function getFirst()
+    public function getFirst()
     {
         if (count($this->mostSignificantIndex) == 2) {
             $mostSignificantIndex = array_flip($this->mostSignificantIndex);
@@ -124,7 +194,7 @@ class DoubleLinkedList implements DoubleLinkedListInterface
      * @return DoubleLinkedNodeInterface
      * @throws DoubleLinkedListException
      */
-    protected function getLast()
+    public function getLast()
     {
         if (count($this->mostSignificantIndex) == 2) {
             $mostSignificantIndex = array_flip($this->mostSignificantIndex);
@@ -134,6 +204,34 @@ class DoubleLinkedList implements DoubleLinkedListInterface
         }
 
         throw new DoubleLinkedListException('There is no last node in list', DoubleLinkedListException::UNDEFINED_LAST_NODE);
+    }
+
+    /**
+     * @param $key
+     * @return integer
+     * @throws DoubleLinkedListException
+     */
+    public function getPreviousIndex($key)
+    {
+        if (!isset($this->previousIndex[$key])) {
+            throw new DoubleLinkedListException('Node dose not exist.', DoubleLinkedListException::UNDEFINED_NODE);
+        }
+
+        return $this->previousIndex[$key];
+    }
+
+    /**
+     * @param $key
+     * @return integer
+     * @throws DoubleLinkedListException
+     */
+    public function getNextIndex($key)
+    {
+        if (!isset($this->nextIndex[$key])) {
+            throw new DoubleLinkedListException('Node dose not exist.', DoubleLinkedListException::UNDEFINED_NODE);
+        }
+
+        return $this->nextIndex[$key];
     }
 
     /**

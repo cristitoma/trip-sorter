@@ -13,6 +13,6 @@ final class AirportBusCard extends AbstractTransportationCard
      */
     public function __toString()
     {
-        return "Take the airport bus {$this->number} from {$this->previous} to {$this->next}. {$this->seat}.";
+        return str_replace("  ", " ","Take the airport bus {$this->number} from {$this->previous} to {$this->next}. {$this->seat}.");
     }
 }
