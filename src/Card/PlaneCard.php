@@ -9,10 +9,10 @@ namespace TripSorter\Card;
 final class PlaneCard extends AbstractTransportationCard
 {
     /** @var string */
-    protected $baggageInformation;
+    private $baggageInformation;
 
     /** @var string */
-    protected $gate;
+    private $gate;
 
     /**
      * @param $baggageInformation
