@@ -6,7 +6,7 @@ namespace TripSorter\Library;
  * Class DoubleLinkedNode
  * @package TripSorter\Library
  */
-class DoubleLinkedNode implements DoubleLinkedSampleNodeInterface
+class DoubleLinkedNode implements DoubleLinkedNodeInterface
 {
     /**
      * @var mixed
@@ -19,25 +19,19 @@ class DoubleLinkedNode implements DoubleLinkedSampleNodeInterface
     private $next;
 
     /**
-     * @var mixed
-     */
-    private $value;
-
-    /**
      * DoubleLinkedNode constructor.
-     * @param mixed $value
      * @param mixed $previous
      * @param mixed $next
+     * @internal param mixed $value
      */
-    public function __construct($value = null, $previous = null, $next = null)
+    public function __construct($previous, $next)
     {
-        $this->value = $value;
         $this->previous = $previous;
         $this->next = $next;
     }
 
     /**
-     * @return mixed|null
+     * @return mixed
      */
     public function getPrevious()
     {
@@ -45,51 +39,10 @@ class DoubleLinkedNode implements DoubleLinkedSampleNodeInterface
     }
 
     /**
-     * @return mixed|null
+     * @return mixed
      */
     public function getNext()
     {
         return $this->next;
-    }
-
-    /**
-     * @param $previous
-     * @return $this
-     */
-    public function setPrevious($previous)
-    {
-        $this->previous = $previous;
-
-        return $this;
-    }
-
-    /**
-     * @param $next
-     * @return $this
-     */
-    public function setNext($next)
-    {
-        $this->next = $next;
-
-        return $this;
-    }
-
-    /**
-     * @param $value
-     * @return $this
-     */
-    public function setValue($value)
-    {
-        $this->value = $value;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed|null
-     */
-    public function getValue()
-    {
-        return $this->value;
     }
 }

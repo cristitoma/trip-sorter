@@ -2,7 +2,7 @@
 
 namespace TripSorter;
 
-use TripSorter\Card\TransportationCardInterface;
+use TripSorter\Card\AbstractTransportationCard;
 use TripSorter\Library\DoubleLinkedList;
 
 /**
@@ -19,7 +19,7 @@ final class BoardingCardList extends DoubleLinkedList
         $story = "";
         if ($this->isLinked()) {
             $storyRow = 1;
-            /** @var TransportationCardInterface $node */
+            /** @var AbstractTransportationCard $node */
             foreach ($this as $node) {
                 $nodeStory = (string)$node;
                 $story .= "{$storyRow}. {$nodeStory}\n";

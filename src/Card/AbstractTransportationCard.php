@@ -2,23 +2,19 @@
 
 namespace TripSorter\Card;
 
+use TripSorter\Library\DoubleLinkedNode;
+
 /**
  * Class AbstractTransportationCard
  * @package TripSorter\Card
  */
-abstract class AbstractTransportationCard implements TransportationCardInterface
+abstract class AbstractTransportationCard extends DoubleLinkedNode
 {
     /** @var  string */
     protected $number;
 
     /** @var  string */
     protected $seat;
-
-    /** @var  string */
-    protected $next;
-
-    /** @var  string */
-    protected $previous;
 
     /**
      * @param string $number
@@ -61,38 +57,5 @@ abstract class AbstractTransportationCard implements TransportationCardInterface
     /**
      * @return string
      */
-    public function getPrevious()
-    {
-        return $this->previous;
-    }
-
-    /**
-     * @return string
-     */
-    public function getNext()
-    {
-        return $this->next;
-    }
-
-    /**
-     * @param string $previous
-     * @return $this
-     */
-    public function setPrevious($previous)
-    {
-        $this->previous = $previous;
-
-        return $this;
-    }
-
-    /**
-     * @param string $next
-     * @return $this
-     */
-    public function setNext($next)
-    {
-        $this->next = $next;
-
-        return $this;
-    }
+    abstract public function  __toString();
 }

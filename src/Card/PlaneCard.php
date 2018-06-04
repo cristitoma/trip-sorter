@@ -6,7 +6,7 @@ namespace TripSorter\Card;
  * Class PlaneCard
  * @package TripSorter\Card
  */
-final class PlaneCard extends AbstractTransportationCard implements PlaneCardInterface
+final class PlaneCard extends AbstractTransportationCard
 {
     /** @var string */
     protected $baggageInformation;
@@ -57,7 +57,7 @@ final class PlaneCard extends AbstractTransportationCard implements PlaneCardInt
      */
     public function __toString()
     {
-        return "From {$this->previous}, take flight {$this->number} to {$this->next}. Gate {$this->gate}, seat {$this->seat}." . PHP_EOL .
-               "   {$this->baggageInformation}.";
+        return "From {$this->getPrevious()}, take flight {$this->getNumber()} to {$this->getNext()}. Gate {$this->getGate()}, seat {$this->getSeat()}." . PHP_EOL .
+               "   {$this->getBaggageInformation()}.";
     }
 }

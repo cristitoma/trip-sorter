@@ -13,6 +13,6 @@ final class TrainCard extends AbstractTransportationCard
      */
     public function __toString()
     {
-        return "Take train {$this->number} from {$this->previous} to {$this->next}. Sit in seat {$this->seat}.";
+        return "Take train {$this->getNumber()} from {$this->getPrevious()} to {$this->getNext()}. Sit in seat {$this->getSeat()}.";
     }
 }

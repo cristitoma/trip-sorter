@@ -7,7 +7,7 @@ use TripSorter\Library\DoubleLinkedList;
 use TripSorter\Library\DoubleLinkedListInterface;
 use TripSorter\Library\DoubleLinkedListService;
 use TripSorter\Library\DoubleLinkedNode;
-use TripSorter\Library\DoubleLinkedSampleNodeInterface;
+use TripSorter\Library\DoubleLinkedNodeInterface;
 
 /**
  * Class DoubleLinkedListTest
@@ -33,10 +33,10 @@ class DoubleLinkedListServiceTest extends TestCase
             $doubleLinkedListService->link($doubleLinkedList);
 
             $listValues = [];
-            /** @var DoubleLinkedSampleNodeInterface $node */
+            /** @var DoubleLinkedNodeInterface $node */
             foreach ($doubleLinkedList as $node)
             {
-                $listValues[] = $node->getValue();
+                $listValues[] = $node->getPrevious() . ' - ' . $node->getNext();
             }
 
             $this->assertEquals($expectedValues, $listValues, "Test linked list -> fixture {$fixtureName}");
@@ -50,22 +50,22 @@ class DoubleLinkedListServiceTest extends TestCase
     {
         $doubleLinkedList = new DoubleLinkedList();
 
-        $doubleLinkedList->add(new DoubleLinkedNode("Constanta - End", "constanta", "end"));
-        $doubleLinkedList->add(new DoubleLinkedNode("Arad - Cluj", "arad", "cluj"));
-        $doubleLinkedList->add(new DoubleLinkedNode("Brasov - Arges", "brasov", "arges"));
-        $doubleLinkedList->add(new DoubleLinkedNode("Iasi - Arad", "iasi", "arad"));
-        $doubleLinkedList->add(new DoubleLinkedNode("Arges - Constanta", "arges", "constanta"));
-        $doubleLinkedList->add(new DoubleLinkedNode("Cluj - Brasov", "cluj", "brasov"));
-        $doubleLinkedList->add(new DoubleLinkedNode("Start - Iasi", "start", "iasi"));
+        $doubleLinkedList->add(new DoubleLinkedNode("constanta", "end"));
+        $doubleLinkedList->add(new DoubleLinkedNode("arad", "cluj"));
+        $doubleLinkedList->add(new DoubleLinkedNode("brasov", "arges"));
+        $doubleLinkedList->add(new DoubleLinkedNode("iasi", "arad"));
+        $doubleLinkedList->add(new DoubleLinkedNode("arges", "constanta"));
+        $doubleLinkedList->add(new DoubleLinkedNode("cluj", "brasov"));
+        $doubleLinkedList->add(new DoubleLinkedNode("start", "iasi"));
 
         $expectedValues = [
-            "Start - Iasi",
-            "Iasi - Arad",
-            "Arad - Cluj",
-            "Cluj - Brasov",
-            "Brasov - Arges",
-            "Arges - Constanta",
-            "Constanta - End"
+            "start - iasi",
+            "iasi - arad",
+            "arad - cluj",
+            "cluj - brasov",
+            "brasov - arges",
+            "arges - constanta",
+            "constanta - end"
         ];
 
         return [
@@ -82,20 +82,20 @@ class DoubleLinkedListServiceTest extends TestCase
     {
         $doubleLinkedList = new DoubleLinkedList();
 
-        $doubleLinkedList->add(new DoubleLinkedNode("Arad - Cluj", "arad", "cluj"));
-        $doubleLinkedList->add(new DoubleLinkedNode("Constanta - End", "constanta", "end"));
-        $doubleLinkedList->add(new DoubleLinkedNode("Arges - Constanta", "arges", "constanta"));
-        $doubleLinkedList->add(new DoubleLinkedNode("Cluj - Brasov", "cluj", "brasov"));
-        $doubleLinkedList->add(new DoubleLinkedNode("Brasov - Arges", "brasov", "arges"));
-        $doubleLinkedList->add(new DoubleLinkedNode("Start - Arad", "start", "arad"));
+        $doubleLinkedList->add(new DoubleLinkedNode("arad", "cluj"));
+        $doubleLinkedList->add(new DoubleLinkedNode("constanta", "end"));
+        $doubleLinkedList->add(new DoubleLinkedNode("arges", "constanta"));
+        $doubleLinkedList->add(new DoubleLinkedNode("cluj", "brasov"));
+        $doubleLinkedList->add(new DoubleLinkedNode("brasov", "arges"));
+        $doubleLinkedList->add(new DoubleLinkedNode("start", "arad"));
 
         $expectedValues = [
-            "Start - Arad",
-            "Arad - Cluj",
-            "Cluj - Brasov",
-            "Brasov - Arges",
-            "Arges - Constanta",
-            "Constanta - End"
+            "start - arad",
+            "arad - cluj",
+            "cluj - brasov",
+            "brasov - arges",
+            "arges - constanta",
+            "constanta - end"
         ];
 
         return [

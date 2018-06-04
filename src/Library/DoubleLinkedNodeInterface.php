@@ -9,6 +9,13 @@ namespace TripSorter\Library;
 interface DoubleLinkedNodeInterface
 {
     /**
+     * DoubleLinkedNodeInterface constructor.
+     * @param $previous
+     * @param $next
+     */
+    public function __construct($previous, $next);
+
+    /**
      * @return mixed
      */
     public function getPrevious();
@@ -17,16 +24,4 @@ interface DoubleLinkedNodeInterface
      * @return mixed
      */
     public function getNext();
-
-    /**
-     * @param $previous
-     * @return mixed
-     */
-    public function setPrevious($previous);
-
-    /**
-     * @param $next
-     * @return mixed
-     */
-    public function setNext($next);
 }
